@@ -22,11 +22,18 @@ def count_chicken_detections(
     bird detections can be used as a fallback.
     """
 
-    labels = [str(item.get("label", "")).strip().lower() for item in detections]
-    chicken_count = sum(1 for label in labels if _is_chicken_label(label))
+    chicken_count = 0
+    bird_count = 0
+    for item in detections:
+        label = str(item.get("label", "")).strip().lower()
+        if _is_chicken_label(label):
+            chicken_count += 1
+        elif label == "bird":
+            bird_count += 1
+
     if chicken_count > 0 or not allow_bird_fallback:
         return chicken_count
-    return sum(1 for label in labels if label == "bird")
+    return bird_count
 
 
 def _label_from_names(names: object, class_id_int: int) -> str:
@@ -83,13 +90,13 @@ def detect_chickens_in_image(
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Detect and count chickens from a captured photo.")
-    parser.add_argument("--image", required=True, help="Path to captured photo")
+    parser = argparse.ArgumentParser(description="Detect and count chickens from a chicken photo.")
+    parser.add_argument("--image", required=True, help="Path to chicken photo")
     parser.add_argument("--model", default="yolov8n.pt", help="YOLO model path")
     parser.add_argument("--conf", type=float, default=0.25, help="Confidence threshold")
     parser.add_argument(
         "--output",
-        default="detected_output.jpg",
+        default=None,
         help="Path to save annotated detection image",
     )
     parser.add_argument(

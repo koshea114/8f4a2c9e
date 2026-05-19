@@ -1,9 +1,13 @@
 import unittest
 
-from chicken_detector import count_chicken_detections
+from chicken_detector import CHICKEN_KEYWORDS, _is_chicken_label, count_chicken_detections
 
 
 class ChickenDetectorCountTests(unittest.TestCase):
+    def test_all_keywords_are_detected_as_chicken(self):
+        for keyword in CHICKEN_KEYWORDS:
+            self.assertTrue(_is_chicken_label(keyword))
+
     def test_count_chicken_labels(self):
         detections = [
             {"label": "chicken", "confidence": 0.9},
@@ -23,6 +27,10 @@ class ChickenDetectorCountTests(unittest.TestCase):
     def test_disable_bird_fallback(self):
         detections = [{"label": "bird", "confidence": 0.9}]
         self.assertEqual(count_chicken_detections(detections, allow_bird_fallback=False), 0)
+
+    def test_empty_or_missing_labels(self):
+        detections = [{"confidence": 0.9}, {"label": "  "}]
+        self.assertEqual(count_chicken_detections(detections), 0)
 
 
 if __name__ == "__main__":

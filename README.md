@@ -11,13 +11,13 @@
 
 ```bash
 pip install ultralytics opencv-python
-python chicken_detector.py --image /absolute/path/to/photo.jpg
+python chicken_detector.py --image /absolute/path/to/photo.jpg --output /absolute/path/to/result.jpg
 ```
 
 运行后会输出：
 
-- `chicken_count=<数量>`
-- `saved_result=<标注后图片路径>`
+- `chicken_count=<数量>`（始终输出）
+- `saved_result=<标注后图片路径>`（仅在传入 `--output` 时输出）
 
 ## 手机部署建议
 
