@@ -29,6 +29,15 @@ def count_chicken_detections(
     return sum(1 for label in labels if label == "bird")
 
 
+def _label_from_names(names: object, class_id_int: int) -> str:
+    if isinstance(names, dict):
+        return str(names.get(class_id_int, class_id_int))
+    if isinstance(names, (list, tuple)):
+        if 0 <= class_id_int < len(names):
+            return str(names[class_id_int])
+    return str(class_id_int)
+
+
 def detect_chickens_in_image(
     image_path: str,
     model_path: str = "yolov8n.pt",
@@ -53,10 +62,7 @@ def detect_chickens_in_image(
         confidences = boxes.conf.tolist()
         for class_id, confidence in zip(class_ids, confidences):
             class_id_int = int(class_id)
-            if isinstance(names, dict):
-                label = names.get(class_id_int, str(class_id_int))
-            else:
-                label = names[class_id_int]
+            label = _label_from_names(names, class_id_int)
             detections.append({"label": str(label), "confidence": float(confidence)})
 
     chicken_count = count_chicken_detections(detections, allow_bird_fallback=allow_bird_fallback)
