@@ -12,6 +12,8 @@
 ```bash
 pip install ultralytics opencv-python
 python chicken_detector.py --image /absolute/path/to/photo.jpg --output /absolute/path/to/result.jpg
+# 或使用相对路径
+python chicken_detector.py --image ./img/sample.jpg --output ./result.jpg
 ```
 
 运行后会输出：
